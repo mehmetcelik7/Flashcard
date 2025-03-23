@@ -22,7 +22,7 @@ struct TextAndOptionalImageView: View {
     var body: some View {
         GeometryReader { geometry in
             VStack {
-                Text(text)
+                Text(.init(text))
                     .font(titleFont)
                     .fontWeight(.bold)
                     .multilineTextAlignment(.center)
