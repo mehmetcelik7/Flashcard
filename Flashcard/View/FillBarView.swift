@@ -33,6 +33,8 @@ struct FillBarView: View {
                 }
             }
         }
+        .frame(width: .infinity,height: barWidth)
+       
     }
 }
 
