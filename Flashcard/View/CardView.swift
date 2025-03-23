@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct CardView: View {
-    @State private var rotate = true
+    @State private var rotate = false
     @State private var offset = CGSize.zero
     @State private var scaleFactor = 1.0
     
@@ -27,6 +27,31 @@ struct CardView: View {
     
     let cornerRadius = 10.0
     let lowerRectangleHeight = 80.0
+    
+    var drag: some Gesture {
+        DragGesture()
+            .onChanged{ gesture in
+                offset = gesture.translation
+            }
+            .onEnded{ _ in
+                if abs(offset.width) > 100 {
+                    removeCard()
+                }else {
+                    offset = .zero
+                }
+            }
+    }
+    var magnify: some Gesture {
+        MagnifyGesture()
+            .onChanged{ gesture in
+                withAnimation {
+                    scaleFactor = gesture.magnification
+                }
+            }
+            .onEnded{ _  in
+                scaleFactor = 1.0
+            }
+    }
     var body: some View {
         ZStack {
             TwoSidedBackgroundView(
@@ -42,6 +67,9 @@ struct CardView: View {
                     imageName: currentImageName,
                     rotate: rotate
                 )
+                .scaleEffect(scaleFactor)
+                
+                
                 Spacer()
                 Rectangle()
                     .fill(.gray.opacity(0.4))
@@ -53,13 +81,26 @@ struct CardView: View {
                     )
             }
            
-        }.rotation3DEffect(rotate ? .degrees(180) : .zero, axis: (x:0.0,y:1.0,z:0.0))
+        }
+            .rotation3DEffect(rotate ? .degrees(180) : .zero, axis: (x:0.0,y:1.0,z:0.0))
             .overlay(
                 RoundedRectangle(cornerRadius: cornerRadius)
                     .stroke(.gray,lineWidth: 1)
             )
             .clipShape(.rect(cornerRadius: cornerRadius))
             .padding()
+            .offset(x: offset.width*2, y: offset.height * 0.4)
+            .gesture(
+                drag
+            )
+            .gesture(
+                magnify
+            )
+            .onTapGesture {
+                withAnimation {
+                    rotate.toggle()
+                }
+            }
     }
 }
 
