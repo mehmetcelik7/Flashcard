@@ -21,17 +21,29 @@ struct HeaderView: View {
     let unicodeX = "\u{2715}"
     
     var dismissFunc: () -> Void
+    
+    var topicFont: Font {
+        UIDevice.isIPad ? .largeTitle : .body
+    }
+    
+    var  numQuestionsText: String {
+        "\(questionNumber) out of \(NumberOfQuestions)"
+    }
+    
+    var numQuestionsFont: Font {
+        UIDevice.isIPad ? .largeTitle : .caption
+    }
     var body: some View {
         VStack(spacing: 5) {
             HStack {
                 Text(topic)
                   
-                    .font(.body)
+                    .font(topicFont)
                 
                 Spacer()
                 
-                Text("\(questionNumber) out of \(NumberOfQuestions)")
-                    .font(.caption)
+                Text(numQuestionsText)
+                    .font(numQuestionsFont)
                  
 
             }.fontWeight(.bold)

@@ -46,6 +46,7 @@ struct QuestionsView: View {
                        
                     }
                 }
+                .padding(.horizontal, UIDevice.isIPad  ? nil : 0)
 
             }
         }
